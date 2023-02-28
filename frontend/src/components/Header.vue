@@ -12,6 +12,9 @@
               <li v-if="$store.state.account.id">
                 <router-link to="/orders" class="text-white">주문 내역</router-link>
               </li>
+              <li v-if="$store.state.account.id">
+                <router-link to="/board" class="text-white">게시판</router-link>
+              </li>
               <li>
                 <router-link to="/login" class="text-white" v-if="!$store.state.account.id">로그인</router-link>
                 <a to="/login" class="text-white" @click="logout()" v-else>로그아웃</a>
@@ -33,7 +36,7 @@
           <strong>Gallery</strong>
         </router-link>
         <router-link to="/cart" class="cart btn" v-if="$store.state.account.id">
-          <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+          <i class="fa fa-shopping-cart" aria-hidden="true"></i> 카트
         </router-link>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarHeader"
                 aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
