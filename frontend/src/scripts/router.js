@@ -5,7 +5,7 @@ import Cart from '@/pages/Cart'
 import Order from '@/pages/Order'
 import Orders from '@/pages/Orders'
 import Board from '@/pages/Board'
-import BoardDetail from '@/pages/BoardDetail.vue'
+import BoardDetail from '@/pages/BoardDetail'
 
 const routes =[
 	{path: '/', component:Home},
@@ -14,7 +14,12 @@ const routes =[
 	{path:'/order', component:Order},
 	{path:'/orders', component:Orders},
 	{path: '/board', component: Board},
-	{path: '/boardDetail', component: BoardDetail}
+	{
+
+		path: '/boardDetail',
+		component: BoardDetail,
+		props: true
+	}
 
 ]
 
