@@ -8,10 +8,10 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import store from "@/scripts/store";
-
 import { useRoute } from "vue-router/dist/vue-router";
 import axios from "axios";
 import {watch} from "vue";
+
 
 export default {
   name: "App",
@@ -19,6 +19,9 @@ export default {
     Header,
     Footer,
   },
+data(){
+
+},
   setup() {
     const check = () => {
       axios.get(`/api/account/check`).then(({ data }) => {

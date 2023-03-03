@@ -64,7 +64,7 @@ export default {
         query: this.requestBody
       })
     },
-    detail(id) {   //셋업으로 불러오니까 오류남..  애로우함수처럼 적어도 에러남..
+    detail(id) {   //셋업으로 불러오니까 오류남(id를 못읽음)..  애로우함수처럼 적어도 에러남..
       this.requestBody.id = id;
       router.push({
         path: '/boardDetail',
