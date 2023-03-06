@@ -39,7 +39,7 @@ public class BoardController {
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
-    @GetMapping("/api/board/detail/{id}")
+    @GetMapping("/api/board/{id}")
     public ResponseEntity getBoardDetail(
             @PathVariable("id") Integer id,
             @CookieValue(value = "token", required = false) String token
@@ -47,14 +47,16 @@ public class BoardController {
         if ( !jwtService.isValid(token)) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
-        Optional<Board> boardOptional = boardRepository.findById(id);
+        Board board = boardRepository.findById(id).orElseThrow(() -> new RuntimeException("게시글을 찾을 수 없습니다."));
 
-        Board board = boardOptional.get();
+//        Optional<Board> boardOptional = boardRepository.findById(id);
+//        Board board = boardOptional.get();
+
         System.out.println(board.getTitle());
         return new ResponseEntity<>(board, HttpStatus.OK);
     }
     @Transactional
-    @PatchMapping("/api/board/write")
+    @PatchMapping("/api/board")
     public ResponseEntity update(
             @RequestBody BoardDto dto,
             @CookieValue(value = "token", required = false) String token
@@ -62,19 +64,21 @@ public class BoardController {
         if ( !jwtService.isValid(token)) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
-        Optional<Board> newBoard = boardRepository.findById(dto.getId());
-        Board board = newBoard.get();
+//        Optional<Board> newBoard = boardRepository.findById(dto.getId());
+//        Board board = newBoard.get();
+
+        Board board = boardRepository.findById(dto.getId()).orElseThrow(() -> new RuntimeException("게시글을 찾을 수 없습니다."));
 
         board.setContent(dto.getContent());
         board.setTitle(dto.getTitle());
 
-        boardRepository.save(board);
+        //boardRepository.save(board);
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(boardRepository.save(board),HttpStatus.OK);
     }
 
     @Transactional
-    @PostMapping("/api/board/write")
+    @PostMapping("/api/board")
     public ResponseEntity create(
             @RequestBody Board dto,
             @CookieValue(value ="token", required = false) String token
@@ -90,7 +94,32 @@ public class BoardController {
         newboard.setTitle(dto.getTitle());
         newboard.setContent(dto.getTitle());
         newboard.setWriter(writer);
-        boardRepository.save(newboard);
+        //boardRepository.save(newboard);
+
+        //builder로 만들기
+//
+//        Board builderBoard = Board.builder()
+//                .title(dto.getTitle())
+//                .content(dto.getContent())
+//                .writer(writer)
+//                .build();
+
+
+        return new ResponseEntity(boardRepository.save(newboard),HttpStatus.OK);
+    }
+
+    @Transactional
+    @DeleteMapping("/api/board/{id}")
+    public ResponseEntity delete(
+            @PathVariable Integer id,
+            @CookieValue(value="token", required = false)String token
+    ){
+        if( !jwtService.isValid(token)){
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        }
+
+        Board board = boardRepository.findById(id).orElseThrow(() -> new RuntimeException("게시글을 찾을 수 없습니다."));
+        boardRepository.delete(board);
 
         return new ResponseEntity(HttpStatus.OK);
     }

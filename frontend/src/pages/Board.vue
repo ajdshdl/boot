@@ -11,12 +11,10 @@
         </tr>
         </thead>
         <tbody>
-        <tr class="active-table-tab" v-for="(item,idx) in state.items" :key="idx">
-          <td>{{ item.id }}</td>
-          <td><a href="javascript:;" @click="detail(`${item.id}`)">{{ item.title }}</a></td>
-          <!--            <router-link to="/boardDetail"  >상세보기</router-link>-->
-          <!--            <router-link :to="{ name: 'BoardDetail', params: { id: item.id }}">User</router-link>-->
-          <td>{{ item.writer }}</td>
+        <tr class="active-table-tab" v-for="(row,idx) in list" :key="idx">
+          <td>{{ row.id }}</td>
+          <td><a href="javascript:;" @click="detail(`${row.id}`)">{{ row.title }}</a></td>
+          <td>{{ row.writer }}</td>
         </tr>
         </tbody>
       </table>
@@ -25,43 +23,29 @@
 </template>
 
 <script>
-import {reactive} from "vue";
 import axios from "axios";
-import lib from "@/scripts/lib";
 import router from "@/scripts/router";
 
 export default {
   name: "Board",
   data() {
     return {
-      requestBody: {}
+      requestBody: {},
+      list:{}
     }
   },
-  setup() {
-    const state = reactive({
-      items: []
-
-    })
-    const load = () => {
-      axios.get("/api/board/list").then(({data}) => {
-        console.log(data);
-        state.items = data;
-
-      })
-    };
-    const write = () => {
-      router.push('/BoardDetail')
-    }
-
-    load();
-    return {state, lib,write}
+  mounted() {
+    this.fnGetList()
   },
   methods: {
-    fnView(idx) {
-      this.requestBody.idx = idx
-      this.$router.push({
-        path: './detail',
-        query: this.requestBody
+    fnGetList(){
+      axios.get("/api/board/list").then(({data}) => {
+        console.log(data);
+        this.list = data;
+      }).catch((err) => {
+        if (err.message.indexOf('Network Error') > -1) {
+          alert('네트워크가 원활하지 않습니다.\n잠시 후 다시 시도해주세요.')
+        }
       })
     },
     detail(id) {   //셋업으로 불러오니까 오류남(id를 못읽음)..  애로우함수처럼 적어도 에러남..
@@ -70,7 +54,11 @@ export default {
         path: '/boardDetail',
         query: this.requestBody
       })
-    }
+    },
+    write() {
+      router.push('/boardWrite')
+    },
+
   }
 }
 </script>

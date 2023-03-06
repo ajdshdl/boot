@@ -6,6 +6,7 @@ import Order from '@/pages/Order'
 import Orders from '@/pages/Orders'
 import Board from '@/pages/Board'
 import BoardDetail from '@/pages/BoardDetail'
+import BoardWrite from "@/pages/BoardWrite.vue";
 
 const routes =[
 	{path: '/', component:Home},
@@ -19,7 +20,8 @@ const routes =[
 		path: '/boardDetail',
 		component: BoardDetail,
 		props: true
-	}
+	},
+	{path:'/boardWrite', component: BoardWrite}
 
 ]
 
